@@ -1,0 +1,26 @@
+{
+  "name": "challenge01",
+  "version": "1.0.0",
+  "description": "## Contexto Você está desenvolvendo um sistema para um comparador de preços que precisa identificar quando diferentes supermercados vendem o mesmo produto, mesmo quando os nomes têm pequenas variações.",
+  "main": "src/script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.3"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "fast-levenshtein": "^3.0.0",
+    "string-similarity": "^4.0.4"
+  }
+}
