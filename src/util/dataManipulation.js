@@ -22,7 +22,7 @@ const getData = (filename) => {
   return data;
 };
 
-// function that returns products removing duplicate
+// function that returns all products and sort them
 const getSortedProducts = (data) => {
   return data.map((product) => product.title).sort();
 };
