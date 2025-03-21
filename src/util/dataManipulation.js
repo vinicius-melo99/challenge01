@@ -6,7 +6,7 @@ const {
   getStringSimilarity,
   getKeywordSimilarity,
 } = require('./stringManipulation');
-const { generateCategory, generateProduct } = require('./factoryFunctions');
+const { generateCategory, generateProducts } = require('./factoryFunctions');
 
 //function to get data of a JSON file
 const getData = (filename) => {
@@ -23,8 +23,8 @@ const getData = (filename) => {
 };
 
 // function that returns products removing duplicate
-const getUniqueSortedProducts = (data) => {
-  return Array.from(new Set([...data.map((product) => product.title)].sort()));
+const getSortedProducts = (data) => {
+  return data.map((product) => product.title).sort();
 };
 
 const writeFile = (file) => {
@@ -45,11 +45,11 @@ const writeFile = (file) => {
 };
 
 //function that creates and return a list of product categories, with each item containing its name, price, and the supermarket it belongs to.
-const categorizeProducts = (data, uniqueSortedProducts) => {
+const categorizeProducts = (data, sortedProducts) => {
   let final = [];
 
-  for (let i = 0; i < uniqueSortedProducts.length; i++) {
-    const currentString = uniqueSortedProducts[i];
+  for (let i = 0; i < sortedProducts.length; i++) {
+    const currentString = sortedProducts[i];
 
     if (!currentString) {
       continue;
@@ -59,12 +59,9 @@ const categorizeProducts = (data, uniqueSortedProducts) => {
 
     final.push(newCategory);
 
-    for (let x = i + 1; x < uniqueSortedProducts.length; x++) {
+    for (let x = i + 1; x < sortedProducts.length; x++) {
       const comparedString = clearString(
-        [...uniqueSortedProducts[x].split(' ')]
-          .sort()
-          .join('')
-          .toLocaleLowerCase(),
+        [...sortedProducts[x].split(' ')].sort().join('').toLocaleLowerCase(),
       );
 
       if (!comparedString) {
@@ -72,18 +69,15 @@ const categorizeProducts = (data, uniqueSortedProducts) => {
       }
 
       const currentString = clearString(
-        [...uniqueSortedProducts[i].split(' ')]
-          .sort()
-          .join('')
-          .toLocaleLowerCase(),
+        [...sortedProducts[i].split(' ')].sort().join('').toLocaleLowerCase(),
       );
 
       const similarity = getStringSimilarity(currentString, comparedString);
 
       if (similarity > 70) {
         const keywordsSimilarity = getKeywordSimilarity(
-          uniqueSortedProducts[x],
-          uniqueSortedProducts[i],
+          sortedProducts[x],
+          sortedProducts[i],
         );
 
         if (keywordsSimilarity <= 75) continue;
@@ -91,11 +85,23 @@ const categorizeProducts = (data, uniqueSortedProducts) => {
         const finalIndex = final.length - 1;
 
         final[finalIndex].count += 1;
-        final[finalIndex].products.push(
-          generateProduct(uniqueSortedProducts[x], data),
-        );
 
-        uniqueSortedProducts[x] = '';
+        const products = generateProducts(sortedProducts[x], data);
+
+        products.forEach((product) => {
+          const finalProducts = final[finalIndex].products;
+          const alreadyAdded = finalProducts.filter(
+            (finalProduct) =>
+              finalProduct.title === product.title &&
+              finalProduct.supermarket === product.supermarket,
+          );
+
+          if (!alreadyAdded.length) {
+            final[finalIndex].products.push(product);
+          }
+        });
+
+        sortedProducts[x] = '';
       }
     }
   }
@@ -105,7 +111,7 @@ const categorizeProducts = (data, uniqueSortedProducts) => {
 
 module.exports = {
   getData,
-  getUniqueSortedProducts,
+  getSortedProducts,
   generateCategory,
   clearString,
   removeUnits,

@@ -2,21 +2,21 @@
 const generateCategory = (categoryName, data) => ({
   category: categoryName,
   count: 1,
-  products: [
-    {
-      ...generateProduct(categoryName, data),
-    },
-  ],
+  products: generateProducts(categoryName, data),
 });
 
 //factory function returns a product object
-const generateProduct = (title, data) => ({
-  title,
-  supermarket: data.find((product) => product.title === title).supermarket,
-  price: data.find((product) => product.title === title).price,
-});
+const generateProducts = (title, data) => {
+  return data
+    .filter((product) => product.title === title)
+    .map(({ title, supermarket, price }) => ({
+      title,
+      supermarket,
+      price,
+    }));
+};
 
 module.exports = {
   generateCategory,
-  generateProduct,
+  generateProducts,
 };

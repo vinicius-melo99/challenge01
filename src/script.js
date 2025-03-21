@@ -1,6 +1,6 @@
 const {
   getData,
-  getUniqueSortedProducts,
+  getSortedProducts,
   categorizeProducts,
   writeFile,
 } = require('./util/dataManipulation');
@@ -9,9 +9,9 @@ const {
 (() => {
   const data = getData('data01.json');
 
-  let uniqueSortedProducts = getUniqueSortedProducts(data);
+  const sortedProducts = getSortedProducts(data);
 
-  const categorizedProducts = categorizeProducts(data, uniqueSortedProducts);
+  const categorizedProducts = categorizeProducts(data, sortedProducts);
 
   writeFile(categorizedProducts);
 })();
