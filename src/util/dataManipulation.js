@@ -23,8 +23,8 @@ const getData = (filename) => {
 };
 
 // function that returns all products and sort them
-const getSortedProducts = (data) => {
-  return data.map((product) => product.title).sort();
+const getProducts = (data) => {
+  return data.map((product) => product.title);
 };
 
 const writeFile = (file) => {
@@ -111,7 +111,7 @@ const categorizeProducts = (data, sortedProducts) => {
 
 module.exports = {
   getData,
-  getSortedProducts,
+  getProducts,
   generateCategory,
   clearString,
   removeUnits,
